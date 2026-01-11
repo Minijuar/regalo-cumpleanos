@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Feliz Cumpleaños</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at top, #ffd1dc, #ff9aa2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Pacifico', cursive;
+            overflow: hidden;
+            /* Cursor para indicar interacción */
+            cursor: pointer;
+        }
+
+        .container {
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+
+        .message {
+            font-size: 3em;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .message span {
+            display: block;
+            font-size: 0.6em;
+            margin-top: 10px;
+        }
+
+        .cake-wrapper {
+            position: relative;
+            margin: 0 auto;
+            width: 260px;
+            /* Transición para desaparecer */
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        /* Ocultar el pastel */
+        .hidden-cake .cake-wrapper {
+            opacity: 0;
+            transform: scale(0.1);
+        }
+        /* Mostrar los botones y el mensaje */
+        .blown .message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Estilos del Pastel --- */
+
+        .plate {
+            width: 280px;
+            height: 40px;
+            background: radial-gradient(circle, #ffffff, #f1f1f1);
+            border-radius: 40px;
+            margin: 0 auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+        }
+
+        .cake {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+        }
+
+        .layer {
+            position: relative;
+            height: 70px;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .top {
+            width: 180px;
+            background: linear-gradient(#ffe4ec, #ff9ac1);
+            border-radius: 25px 25px 15px 15px;
+            margin-bottom: 5px;
+        }
+
+        .middle {
+            width: 210px;
+            background: linear-gradient(#ffc1cc, #ff85a2);
+            margin-bottom: 5px;
+        }
+
+        .bottom {
+            width: 240px;
+            background: linear-gradient(#ff9aa2, #ff5c8a);
+            border-radius: 15px 15px 25px 25px;
+        }
+
+        /* Relleno tipo chispas/dots */
+        .layer::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, rgba(255,255,255,0.9) 3px, transparent 4px),
+                radial-gradient(circle, rgba(255,255,255,0.7) 3px, transparent 4px);
+            background-size: 18px 18px, 24px 24px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.2;
+        }
+
+        /* Goteo de glaseado */
+        .drip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: radial-gradient(circle at top, #ffeef5, #ffc1de);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .drip::before,
+        .drip::after {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: radial-gradient(circle at 30% 20%, #ffeef5, #ffc1de);
+            border-radius: 0 0 26px 26px;
+        }
+
+        .drip::before {
+            left: 25%;
+            top: 10px;
+        }
+
+        .drip::after {
+            left: 60%;
+            top: 5px;
+        }
+
+        /* Velas */
+        .candle {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 55px;
+            background: repeating-linear-gradient(
+                45deg,
+                #ffffff,
+                #ffffff 6px,
+                #ff69b4 6px,
+                #ff69b4 12px
+            );
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .candle::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 12px;
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .flame {
+            position: absolute;
+            top: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 26px;
+            height: 38px;
+            background: radial-gradient(circle at 30% 20%, #fff9c4, #ffb300);
+            border-radius: 50% 50% 45% 45%;
+            box-shadow:
+                0 0 15px rgba(255, 193, 7, 0.9),
+                0 0 30px rgba(255, 160, 0, 0.8);
+            animation: flicker 0.9s infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        @keyframes flicker {
+            0%   { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 0.9; }
+            50%  { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 1; }
+            100% { transform: translateX(-50%) scale(0.95) rotate(-1deg); opacity: 0.85; }
+        }
+
+        /* Estado después de soplar */
+        .blown .flame {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.2);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            animation: none;
+        }
+        /* --- FIN Estilos del Pastel --- */
+
+        /* --- Estilos de Confeti --- */
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 16px;
+            background: #ffeb3b;
+            border-radius: 3px;
+            opacity: 0;
+            animation: fall 4s linear infinite;
+        }
+
+        .confetti:nth-child(1)  { left: 5%;  background: #ffeb3b; animation-delay: 0s; }
+        .confetti:nth-child(2)  { left: 20%; background: #ff80ab; animation-delay: 0.6s; }
+        .confetti:nth-child(3)  { left: 35%; background: #b39ddb; animation-delay: 1.2s; }
+        .confetti:nth-child(4)  { left: 50%; background: #80deea; animation-delay: 1.8s; }
+        .confetti:nth-child(5)  { left: 65%; background: #ffcc80; animation-delay: 2.4s; }
+        .confetti:nth-child(6)  { left: 80%; background: #c5e1a5; animation-delay: 3s; }
+        .confetti:nth-child(7)  { left: 92%; background: #ffab91; animation-delay: 3.4s; }
+
+        @keyframes fall {
+            0% {
+                top: -40px;
+                opacity: 0;
+                transform: rotateZ(0deg);
+            }
+            15% {
+                opacity: 1;
+            }
+            100% {
+                top: 110vh;
+                opacity: 0;
+                transform: rotateZ(360deg);
+            }
+        }
+        /* --- FIN Estilos de Confeti --- */
+
+        /* --- Estilos de Botones de Interacción --- */
+        .button-group {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none; /* Deshabilitado por defecto */
+            transition: opacity 1.5s ease;
+        }
+
+        .blown .button-group {
+            opacity: 1;
+            pointer-events: auto; /* Habilitado al soplar */
+        }
+
+        button {
+            padding: 12px 32px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #ff4d6d, #ff85a2);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.4s ease;
+            font-family: 'Pacifico', cursive; /* Asegurar la fuente en el botón */
+        }
+
+        button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+            background: linear-gradient(45deg, #ff3b5c, #ff6f91);
+        }
+
+        button:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 5px 14px rgba(0,0,0,0.25);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="scene" onclick="blowCandle()">
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+    <div class="confetti"></div>
+
+    <div class="message" id="msg">
+        🎉 Feliz Cumpleaños 21 💖
+        <span>Mi amor, que todos tus deseos se hagan realidad ✨</span>
+    </div>
+
+    <div class="cake-wrapper">
+        <div class="plate"></div>
+
+        <div class="cake">
+            <div class="candle">
+                <div class="flame" id="flame"></div>
+            </div>
+
+            <div class="layer top">
+                <div class="drip"></div>
+            </div>
+            <div class="layer middle">
+                <div class="drip"></div>
+            </div>
+            <div class="layer bottom"></div>
+        </div>
+    </div>
+
+    <div class="button-group" id="buttonGroup">
+        <button onclick="alert('¡Te quiero mucho! 💖')">💝 Te amo</button>
+        <button onclick="playRegaloSong()">🎁 Mi regalo</button>
+    </div>
+</div>
+
+<audio id="song" src="cumpleanos.mp3" preload="auto" loop></audio>
+<audio id="regaloSong" src="mi_cancion_regalo.mp3" preload="auto"></audio> 
+
+
+<script>
+    const scene   = document.getElementById("scene");
+    const song    = document.getElementById("song");
+    const regaloSong = document.getElementById("regaloSong");
+
+    function blowCandle() {
+        // Evitar que se dispare muchas veces
+        if (scene.classList.contains("blown")) return;
+
+        // 1. Apagar la llama y mostrar mensaje/botones
+        scene.classList.add("blown");
+
+        // 2. Desaparecer el pastel
+        scene.classList.add("hidden-cake");
+
+        // 3. Reproducir canción de CUMPLEAÑOS (Se detendrá sola si el audio no tiene 'loop')
+        song.currentTime = 0;
+        song.play().catch((error) => {
+            console.log("El navegador bloqueó la reproducción automática. Intento fallido:", error);
+        });
+
+        // 4. Quitar el cursor de interacción del body
+        document.body.style.cursor = 'default';
+    }
+
+    function playRegaloSong() {
+        // Detener la canción de cumpleaños
+        song.pause();
+        song.currentTime = 0;
+        
+        // Empezar a reproducir la canción de regalo
+        regaloSong.currentTime = 0;
+        regaloSong.play().catch((error) => {
+            alert("No se pudo iniciar la reproducción automática. Intenta activar el sonido en tu navegador.");
+            console.error("Error al reproducir la canción de regalo:", error);
+        });
+        
+        alert("¡Espero que te guste la canción que hice con mucho amor para ti!");
+    }
+</script>
+
+</body>
+</html>
